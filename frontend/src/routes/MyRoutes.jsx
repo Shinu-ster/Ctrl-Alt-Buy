@@ -5,6 +5,7 @@ import Register from "../pages/Register";
 import AdminLogin from "../pages/adminPages/AdminLogin";
 import AdminRegister from "../pages/adminPages/AdminRegister";
 import AddProducts from "../pages/adminPages/AddProducts";
+import AdminDashboard from "../pages/adminPages/AdminDashboard";
 
 export default function MyRoutes() {
   return (
@@ -13,9 +14,11 @@ export default function MyRoutes() {
         <Route path="/" element={<Home />} exact />
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/adminlogin" element={<AdminLogin/>}/>
-        <Route path="/adminregister" element={<AdminRegister/>}/>
+        <Route path="/devportal/login" element={<AdminLogin/>}/>
+        <Route path="/devportal/register" element={<AdminRegister/>}/>
         <Route path="/add" element={<AddProducts/>}/>
+        <Route path="/adminDashboard" element={<AdminDashboard/>}/>
+
       </Routes>
     </BrowserRouter>
   );

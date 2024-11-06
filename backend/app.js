@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const userRouter = require('./modules/users/users.routes');
+const adminRouter = require('./modules/admin/admin.routes');
 require('dotenv').config();
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({extended:false}));
 
 
 app.use('/user',userRouter);
-
+app.use('/admin',adminRouter);
 
 mongoose.connect(process.env.mongo_connect,{}).then(()=>{
     console.log('DB Connected');
