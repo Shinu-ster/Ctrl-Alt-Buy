@@ -5,4 +5,6 @@ const adminAuth = require('../../middlewares/adminAuth');
 
 const productsRouter = express.Router();
 
-productsRouter.post('/addProducts',upload.array('productImages',5),adminAuth,addProduct);
+productsRouter.post('/addProducts',upload.array('productImages',5),addProduct);
+
+module.exports = productsRouter;

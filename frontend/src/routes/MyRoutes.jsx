@@ -16,7 +16,7 @@ export default function MyRoutes() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/devportal/login" element={<AdminLogin/>}/>
         <Route path="/devportal/register" element={<AdminRegister/>}/>
-        <Route path="/add" element={<AddProducts/>}/>
+        <Route path="/devportal/addproducts" element={<AddProducts/>}/>
         <Route path="/adminDashboard" element={<AdminDashboard/>}/>
 
       </Routes>
