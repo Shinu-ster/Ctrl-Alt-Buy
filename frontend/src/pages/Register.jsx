@@ -1,94 +1,92 @@
-import { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
 
-export default function Register() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    phoneNo: '',
+import { Button, TextField, Box, Typography } from '@mui/material';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import {  useNavigate } from 'react-router-dom';
+
+const Register = () => {
+  const validationSchema = Yup.object({
+    username: Yup.string().required('Username is required'),
+    email: Yup.string().email('Invalid email format').required('Email is required'),
+    password: Yup.string().min(6, 'Password should be minimum 6 characters').required('Password is required'),
+    phoneNo: Yup.string()
+      .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
+      .required('Phone number is required')
   });
-  const [errors, setErrors] = useState({});
-
-  // Handle input change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // Validate and submit form
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let newErrors = {};
-
-    if (!formData.username) newErrors.username = 'Username is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
-    if (!formData.phoneNo) {
-      newErrors.phoneNo = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(formData.phoneNo)) {
-      newErrors.phoneNo = 'Phone number must be exactly 10 digits';
-    }else {
-        delete newErrors.phoneNo;  // Ensures no leftover error if valid
-      }
-
-    if (Object.keys(newErrors).length === 0) {
-      // Submit the form (e.g., send data to the backend)
-      console.log('Form submitted:', formData);
-    } else {
-      setErrors(newErrors);
-    }
-  };
-
+  const navigate = useNavigate();
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <h2>Register</h2>
-
-      <TextField
-        label="Username"
-        name="username"
-        variant="standard"
-        value={formData.username}
-        onChange={handleChange}
-        error={!!errors.username}
-        helperText={errors.username}
-      />
-
-      <TextField
-        label="Email"
-        name="email"
-        variant="standard"
-        type="email"
-        value={formData.email}
-        onChange={handleChange}
-        error={!!errors.email}
-        helperText={errors.email}
-      />
-
-      <TextField
-        label="Password"
-        name="password"
-        variant="standard"
-        type="password"
-        value={formData.password}
-        onChange={handleChange}
-        error={!!errors.password}
-        helperText={errors.password}
-      />
-
-      <TextField
-        label="Phone Number"
-        name="phoneNo"
-        variant="standard"
-        value={formData.phoneNo}
-        onChange={handleChange}
-        error={!!errors.phoneNo}
-        helperText={errors.phoneNo}
-      />
-
-      <Button variant="contained" type="submit">Submit</Button>
-    </Box>
+    <Formik
+      initialValues={{ username: '', email: '', password: '', phoneNo: '' }}
+      validationSchema={validationSchema}
+      onSubmit={(values) => {
+        console.log('Register Form Values', values);
+        axios.post('http://localhost:8000/user/register',values)
+        .then((response)=>{
+          toast.success(response.data.status);
+          setTimeout(()=>{
+            navigate('/login');
+          },1000);
+        })
+        .catch((error)=>{
+          toast.error(error.response.data.message);
+        })
+      }}
+    >
+      {({ handleSubmit, isSubmitting }) => (
+        <Box component="main" maxWidth="xs" mx="auto" mt={8}>
+          <Typography component="h1" variant="h5">Register</Typography>
+          <Form onSubmit={handleSubmit}>
+            <Box mt={2}>
+              <Field
+                name="username"
+                as={TextField}
+                label="Username"
+                fullWidth
+                helperText={<ErrorMessage name="username" component="span" style={{ color: 'red' }} />}
+              />
+            </Box>
+            <Box mt={2}>
+              <Field
+                name="email"
+                as={TextField}
+                label="Email"
+                type="email"
+                fullWidth
+                helperText={<ErrorMessage name="email" component="span" style={{ color: 'red' }} />}
+              />
+            </Box>
+            <Box mt={2}>
+              <Field
+                name="password"
+                as={TextField}
+                label="Password"
+                type="password"
+                fullWidth
+                helperText={<ErrorMessage name="password" component="span" style={{ color: 'red' }} />}
+              />
+            </Box>
+            <Box mt={2}>
+              <Field
+                name="phoneNo"
+                as={TextField}
+                label="Phone Number"
+                fullWidth
+                helperText={<ErrorMessage name="phoneNo" component="span" style={{ color: 'red' }} />}
+              />
+            </Box>
+            <Box mt={4}>
+              <Button type="submit" fullWidth variant="contained" color="primary" disabled={isSubmitting}>
+                Register
+              </Button>
+            </Box>
+          </Form>
+          <ToastContainer/>
+        </Box>
+      )}
+    </Formik>
   );
-}
+};
+
+export default Register;
