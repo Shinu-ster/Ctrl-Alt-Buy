@@ -55,6 +55,7 @@ export default function AddProducts() {
       values.productImage.forEach((file) => {
         formData.append("productImages", file);
       });
+      console.log('Form Data:',formData)
 
       axios.post('http://localhost:8000/products/addProducts', formData)
         .then((response) => {

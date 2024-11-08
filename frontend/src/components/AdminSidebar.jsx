@@ -35,7 +35,7 @@ const AdminSidebar = () => {
               Add Products
             </li>
           </Link>
-          <Link to="/orders">
+          <Link to="/viewOrders">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/orders") ? "bg-gray-200" : ""}`}
             >

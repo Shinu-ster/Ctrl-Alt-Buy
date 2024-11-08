@@ -15,11 +15,11 @@ const addProduct = async (req,res)=>{
         }
         const parsedItemPrice = parseFloat(itemPrice);
         const parseStocks = parseInt(stocks);
-        
+        console.log('Parsed Stocks',parseStocks)
         const productData = {
             itemName,
             itemPrice:parsedItemPrice,
-            stock:parseStocks,
+            stocks:parseStocks,
             imageUrl:productImage.map((file)=> '/uploads/'+file.filename)
         }
 
@@ -35,7 +35,6 @@ const addProduct = async (req,res)=>{
             message:error.message || error,
         })
     }
-    
 }
 
 module.exports = addProduct;

@@ -6,8 +6,9 @@ import AdminLogin from "../pages/adminPages/AdminLogin";
 import AdminRegister from "../pages/adminPages/AdminRegister";
 import AddProducts from "../pages/adminPages/AddProducts";
 import AdminDashboard from "../pages/adminPages/AdminDashboard";
-import ViewProducts from "../pages/adminPages/ViewProducts";
+
 import Shop from "../pages/Shop";
+import ViewOrders from "../pages/adminPages/ViewOrders";
 
 export default function MyRoutes() {
   return (
@@ -20,7 +21,7 @@ export default function MyRoutes() {
         <Route path="/devportal/register" element={<AdminRegister/>}/>
         <Route path="/addproducts" element={<AddProducts/>}/>
         <Route path="/adminDashboard" element={<AdminDashboard/>}/>
-        <Route path="/viewProducts" element={<ViewProducts/>}/>
+        <Route path="/viewOrders" element={<ViewOrders/>}/>
         <Route path="/shop" element={<Shop/>}/>
       </Routes>
     </BrowserRouter>
