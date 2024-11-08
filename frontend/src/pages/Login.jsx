@@ -24,7 +24,8 @@ export default function Login() {
         .then((response)=>{
           toast.success(response.data.status);
           setTimeout(()=>{
-            navigate('/home');
+            navigate('/shop');
+            localStorage.setItem('accessToken',response.data.accessToken);
           },1000);
         })
         .catch((error)=>{
