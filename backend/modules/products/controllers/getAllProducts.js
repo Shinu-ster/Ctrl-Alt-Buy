@@ -5,7 +5,7 @@ try {
     const products = await Products.find();
     if(products.length === 0){
         return res.status(404).json({
-            message:"No Procuts found"
+            message:"No Prodcuts found"
         });
 
     }

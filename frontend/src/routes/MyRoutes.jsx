@@ -9,6 +9,7 @@ import AdminDashboard from "../pages/adminPages/AdminDashboard";
 
 import Shop from "../pages/Shop";
 import ViewOrders from "../pages/adminPages/ViewOrders";
+import SingleProduct from "../pages/SingleProduct";
 
 export default function MyRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function MyRoutes() {
         <Route path="/addproducts" element={<AddProducts/>}/>
         <Route path="/adminDashboard" element={<AdminDashboard/>}/>
         <Route path="/viewOrders" element={<ViewOrders/>}/>
+        <Route path="/productdetails/:id" element={<SingleProduct/>}/>
         <Route path="/shop" element={<Shop/>}/>
       </Routes>
     </BrowserRouter>

@@ -4,7 +4,7 @@ import { IconButton, InputBase, Badge } from "@mui/material";
 import { ShoppingCart as ShoppingCartIcon, Search as SearchIcon } from "@mui/icons-material";
 
 const Navbar = () => {
-  const cartItems = 5; // This will dynamically change based on the cart content
+  // const cartItems = 5; 
 
   return (
     <nav className="bg-[#4CAF50] text-white p-2 shadow-md">
@@ -30,7 +30,7 @@ const Navbar = () => {
           <Link to="/cart">
             <IconButton>
               <Badge
-                badgeContent={cartItems}
+                // badgeContent={cartItems}
                 color="error"
                 anchorOrigin={{
                   vertical: "top",
@@ -76,10 +76,9 @@ const Navbar = () => {
           </IconButton>
         </div>
         <div className="flex items-center justify-between">
-          <Link to="/cart" className="text-white">
             <IconButton>
               <Badge
-                badgeContent={cartItems}
+                // badgeContent={}
                 color="error"
                 anchorOrigin={{
                   vertical: "top",
@@ -89,7 +88,6 @@ const Navbar = () => {
                 <ShoppingCartIcon sx={{ color: "white" }} />
               </Badge>
             </IconButton>
-          </Link>
         </div>
       </div>
     </nav>
