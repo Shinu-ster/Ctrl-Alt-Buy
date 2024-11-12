@@ -14,7 +14,7 @@ const cartItemSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    quality:{
+    quantity:{
         type:Number,
         required:true,
         default:1
@@ -27,6 +27,11 @@ const cartItemSchema = new mongoose.Schema({
         }
     }
 });
+
+cartItemSchema.pre('save',function(next){
+    this.totalPrice = this.itemPrice * this.quantity;
+    next();
+})
 
 const CartSchema = new mongoose.Schema({
     userId:{
@@ -50,4 +55,4 @@ CartSchema.pre('save',function(next){
 });
 
 const Cart = mongoose.model("Cart",CartSchema);
-mondule.exports = Cart;
+module.exports = Cart;

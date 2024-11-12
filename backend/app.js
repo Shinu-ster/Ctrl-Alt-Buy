@@ -5,6 +5,7 @@ const path = require('path');
 const userRouter = require('./modules/users/users.routes');
 const adminRouter = require('./modules/admin/admin.routes');
 const productsRouter = require('./modules/products/products.routes');
+const cartRouter = require('./modules/cart/cart.routes');
 require('dotenv').config();
 const app = express();
 
@@ -19,7 +20,8 @@ app.use(express.urlencoded({extended:false}));
 
 app.use('/user',userRouter);
 app.use('/admin',adminRouter);
-app.use('/products',productsRouter)
+app.use('/products',productsRouter);
+app.use('/cart',cartRouter);
 
 mongoose.connect(process.env.mongo_connect,{}).then(()=>{
     console.log('DB Connected');

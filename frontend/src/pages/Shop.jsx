@@ -1,6 +1,6 @@
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -17,19 +17,48 @@ const style = {
   p: 4,
 };
 
+// Function to add items to the cart
+const addToCart = async (cartItem) => {
+  const authToken = localStorage.getItem('accessToken');
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/cart/addtoCart",
+      { cartItem: [cartItem] },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to add to cart");
+  }
+};
+
 export default function Shop() {
   const [open, setOpen] = useState(false);
-  
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const checkLogin = (id) => {
+  const mutation = useMutation({
+    mutationFn: addToCart,
+    onSuccess: (data) => {
+      console.log("Added successfully:", data);
+      // Optional: Update any state here, e.g., cart count
+    },
+    onError: (error) => {
+      console.error("Add to cart failed:", error);
+      alert(error.message);  // Optional: Show error to user
+    }
+  });
+
+  const checkLogin = (product) => {
     const authToken = localStorage.getItem('accessToken');
     if (authToken) {
-      console.log('User is logged in, adding product to cart:', id);
-      // Logic to add the product to the cart can go here
+      mutation.mutate({...product,quantity:1,productId: product._id});
     } else {
-      console.log('User is not logged in, opening modal...');
       handleOpen();  // Open modal if user isn't logged in
     }
   };
@@ -64,7 +93,7 @@ export default function Shop() {
       <Navbar />
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-center mb-6">Shop</h1>
-        
+
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
@@ -83,7 +112,7 @@ export default function Shop() {
                 <p className="text-lg text-green-500">{`$${product.itemPrice}`}</p>
                 <button
                   className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 focus:outline-none"
-                  onClick={() => checkLogin(product._id)}
+                  onClick={() => checkLogin(product)}
                 >
                   Add to Cart
                 </button>
