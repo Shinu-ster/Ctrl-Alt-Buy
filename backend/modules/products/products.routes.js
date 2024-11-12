@@ -10,6 +10,6 @@ const productsRouter = express.Router();
 
 productsRouter.post('/addProducts',upload.array('productImages',5),addProduct);
 productsRouter.get('/getall',getProducts);
-productsRouter.get('/item/:id',auth,getSingleProduct);
+productsRouter.get('/item/:id',getSingleProduct);
 
 module.exports = productsRouter;

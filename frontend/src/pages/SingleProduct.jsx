@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Box, CircularProgress, Typography, Card, CardContent, CardMedia } from "@mui/material";
+import BreadCrumbs from "../components/BreadCrumbs";
 
 const fetchProduct = async (id) => {
     const authToken = localStorage.getItem("accessToken");
@@ -13,6 +14,7 @@ const fetchProduct = async (id) => {
     });
     return response.data;
 };
+
 
 function SingleProduct() {
     const { id } = useParams();
@@ -46,6 +48,7 @@ function SingleProduct() {
     return (
         <>
             <Navbar />
+            <BreadCrumbs itemName ={product.itemName}/>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", mt: 4 }}>
                 <Card sx={{ maxWidth: 500, boxShadow: 3 }}>
                     <CardMedia

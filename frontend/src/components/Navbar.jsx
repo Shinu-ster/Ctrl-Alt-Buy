@@ -1,93 +1,65 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { IconButton, InputBase, Badge } from "@mui/material";
-import { ShoppingCart as ShoppingCartIcon, Search as SearchIcon } from "@mui/icons-material";
+import { IconButton, Badge, Popover, Box, Typography, Button } from "@mui/material";
+import { ShoppingCart as ShoppingCartIcon } from "@mui/icons-material";
 
 const Navbar = () => {
-  // const cartItems = 5; 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  // Open dropdown on cart icon click
+  const handleCartClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
-    <nav className="bg-[#4CAF50] text-white p-2 shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4">
+    <nav className="bg-[#4CAF50] text-white shadow-md" style={{ height: '64px' }}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-full">
+        
         {/* Logo */}
-        <div className="text-2xl font-bold">
-          <Link to="/">MyShop</Link>
-        </div>
-
-        {/* Search Bar (Desktop) */}
-        <div className="hidden md:flex items-center border border-white rounded-md px-3 py-1 w-1/3 space-x-2">
-          <InputBase
-            placeholder="Search products..."
-            sx={{ color: "white", width: "100%" }}
-          />
-          <IconButton type="submit" sx={{ color: "white" }}>
-            <SearchIcon />
-          </IconButton>
-        </div>
-
-        {/* Cart Icon with Badge (Desktop) */}
-        <div className="hidden md:block relative">
-          <Link to="/cart">
-            <IconButton>
-              <Badge
-                // badgeContent={cartItems}
-                color="error"
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                <ShoppingCartIcon sx={{ color: "white" }} />
-              </Badge>
-            </IconButton>
+        <div className="flex items-center">
+          <Link to="/">
+            <img src="src/assets/logo.jpg" className="w-32 h-auto" alt="Home Logo" />
           </Link>
         </div>
 
-        {/* Mobile Menu Button (Hamburger) */}
-        <div className="md:hidden">
-          <button className="text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile View (Menu) */}
-      <div className="md:hidden mt-4 space-y-4 px-4">
-        <div className="w-full flex items-center border border-white rounded-md px-3 py-1">
-          <InputBase
-            placeholder="Search..."
-            sx={{ color: "white", width: "100%" }}
-          />
-          <IconButton type="submit" sx={{ color: "white" }}>
-            <SearchIcon />
+        {/* Cart Icon with Badge */}
+        <div>
+          <IconButton onClick={handleCartClick}>
+            <Badge color="error">
+              <ShoppingCartIcon sx={{ color: "white" }} />
+            </Badge>
           </IconButton>
-        </div>
-        <div className="flex items-center justify-between">
-            <IconButton>
-              <Badge
-                // badgeContent={}
-                color="error"
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
+          <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+          >
+            <Box sx={{ p: 2, width: "300px" }}>
+              <Typography variant="h6">Your Cart</Typography>
+              <Typography variant="body2">Your cart is empty.</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 2 }}
+                component={Link}
+                to="/cart"
+                onClick={handleClose}
               >
-                <ShoppingCartIcon sx={{ color: "white" }} />
-              </Badge>
-            </IconButton>
+                View Cart
+              </Button>
+            </Box>
+          </Popover>
         </div>
       </div>
     </nav>
