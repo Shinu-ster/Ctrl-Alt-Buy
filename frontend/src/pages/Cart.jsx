@@ -2,6 +2,7 @@ import  { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "../components/Navbar";
+import {loadStripe} from '@stripe/stripe-js';
 import { Box, Typography, Button, CircularProgress, Checkbox, FormControlLabel } from "@mui/material";
 
 const Cart = () => {
@@ -56,6 +57,45 @@ const Cart = () => {
   const selectedItemsTotalPrice = cartData?.item
     .filter((item) => selectedItems.includes(item._id))
     .reduce((sum, cartItem) => sum + cartItem.totalPrice, 0);
+
+
+    const makePayment = async () => {
+      const authToken = localStorage.getItem('accessToken');
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+    
+      // Collect all the details of the selected items
+      const selectedItemsDetails = cartData.item.filter(item =>
+        selectedItems.includes(item._id) // Only selected items
+      ).map(item => ({
+        itemName: item.productId.itemName,
+        quantity: item.quantity,
+        imageUrl: item.productId?.imageUrl?.[0] || "", // Assuming the first image
+        price: item.itemPrice,
+        totalPrice: item.totalPrice
+      }));
+    
+      const body = {
+        products: selectedItemsDetails // Send the full details
+      };
+    
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      };
+    
+      const response = await fetch("http://localhost:8000/pay/create-checkout-session", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      });
+    
+      const session = await response.json();
+    
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+    };
+    
 
   return (
     <div>
@@ -121,10 +161,7 @@ const Cart = () => {
               fullWidth
               sx={{ mt: 3 }}
               disabled={selectedItems.length === 0} // Disable if no item selected
-              onClick={() => {
-                // Handle the checkout/payment logic here for selected items
-                console.log("Proceeding to pay for items:", selectedItems);
-              }}
+              onClick={makePayment}
             >
               Pay ${selectedItemsTotalPrice}
             </Button>

@@ -6,6 +6,7 @@ const userRouter = require('./modules/users/users.routes');
 const adminRouter = require('./modules/admin/admin.routes');
 const productsRouter = require('./modules/products/products.routes');
 const cartRouter = require('./modules/cart/cart.routes');
+const paymentRouter = require('./modules/payment/payment.routes');
 require('dotenv').config();
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/user',userRouter);
 app.use('/admin',adminRouter);
 app.use('/products',productsRouter);
 app.use('/cart',cartRouter);
+app.use('/pay',paymentRouter)
 
 mongoose.connect(process.env.mongo_connect,{}).then(()=>{
     console.log('DB Connected');
