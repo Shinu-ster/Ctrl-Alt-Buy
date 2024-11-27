@@ -1,12 +1,19 @@
 const mongoose = require('mongoose');
 const addProduct = async (req,res)=>{
-    const {itemName,itemPrice,stocks} = req.body;
+    const {itemName,itemPrice,stocks,description,typeofItem,specifications} = req.body;
     const productImage = req.files;
+    console.log('Specifications:',specifications);
 
     if(!productImage || productImage.length === 0){
         return res.status(400).json({message: "No images uploaded"})
     }
-
+    let parsedSpecifications;
+    if (typeof specifications === 'string') {
+      parsedSpecifications = JSON.parse(specifications);
+    } else {
+      parsedSpecifications = specifications;
+    }
+    console.log('Parsed Specifications:',parsedSpecifications);
     try {
         if(!itemName || !itemPrice) {
             return res.status(400).json({
@@ -20,8 +27,12 @@ const addProduct = async (req,res)=>{
             itemName,
             itemPrice:parsedItemPrice,
             stocks:parseStocks,
-            imageUrl:productImage.map((file)=> '/uploads/'+file.filename)
+            imageUrl:productImage.map((file)=> '/uploads/'+file.filename),
+            description,
+            typeofItem,
+            specifications: parsedSpecifications,
         }
+        console.log('productData:',productData);
 
         const Products = mongoose.model('products');
         const createProduct = await Products.create(productData);

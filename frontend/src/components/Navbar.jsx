@@ -1,14 +1,40 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { IconButton, Badge, Popover, Box, Typography, Button, CircularProgress } from "@mui/material";
-import { ShoppingCart as ShoppingCartIcon } from "@mui/icons-material";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+  import {  useState } from "react";
+  import { Link } from "react-router-dom";
+  import {
+    IconButton,
+    Badge,
+    Popover,
+    Box,
+    Typography,
+    Button,
+    CircularProgress,
+  } from "@mui/material";
+  import { ShoppingCart as ShoppingCartIcon } from "@mui/icons-material";
+  import axios from "axios";
+  
+  
+
+  import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // Open dropdown on cart icon click
+
+  const fetchCart = async () => {
+    const authToken = localStorage.getItem("accessToken");
+    const response = await axios.get("http://localhost:8000/cart/getCart", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return response.data;
+  };
+
+  const { isLoading, error, data: cartData } = useQuery({
+    queryKey: ["cart"],
+    queryFn: fetchCart,
+  });
+
   const handleCartClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -17,41 +43,31 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
 
-  const fetchCart = async () => {
-    const response = await axios.get('http://localhost:8000/cart/getCart'); // Ensure correct URL
-    return response.data;
-  };
-
-  const { isLoading, error, data: cart } = useQuery({
-    queryKey: ['cart'],
-    queryFn: fetchCart,
-  });
-
-  // Calculate total price if cart data exists
-  const totalPrice = cart?.item.reduce((sum, cartItem) => sum + cartItem.totalPrice, 0);
 
   return (
-    <nav className="bg-[#4CAF50] text-white shadow-md" style={{ height: '64px' }}>
+    <nav className="text-white shadow-md" style={{ height: "64px" }}>
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-full">
-        
         {/* Logo */}
         <div className="flex items-center">
           <Link to="/">
-            <img src="src/assets/logo.jpg" className="w-32 h-auto" alt="Home Logo" />
+            <img
+              src="/logo/NavLogo.png"
+              className="w-52 h-16 object-contain"
+              alt="Home Logo"
+            />
           </Link>
         </div>
 
         {/* Cart Icon with Badge */}
         <div>
           <IconButton onClick={handleCartClick}>
-            <Badge color="error" badgeContent={cart?.item?.length || 0}>
-              <ShoppingCartIcon sx={{ color: "white" }} />
+            <Badge color="error" badgeContent={cartData?.item?.length || 0}>
+              <ShoppingCartIcon sx={{ color: "black" }} />
             </Badge>
           </IconButton>
           <Popover
-            open={open}
+            open={Boolean(anchorEl)}
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
@@ -68,26 +84,54 @@ const Navbar = () => {
                 <Typography variant="body2" color="error">
                   Could not load cart items.
                 </Typography>
-              ) : cart?.item?.length > 0 ? (
+              ) : cartData && cartData.item.length > 0 ? (
                 <Box>
-                  {cart.item.map((cartItem) => (
-                    <Box key={cartItem.productId} display="flex" alignItems="center" my={1}>
+                  {cartData.item.map((cartItem) => (
+                    <Box
+                      key={cartItem._id}
+                      display="flex"
+                      alignItems="center"
+                      my={1}
+                    >
                       <img
-                        src={`http://localhost:8000${cartItem.productId.imageUrl[0]}`} // Use actual image URL path
+                        src={`http://localhost:8000${
+                          cartItem.productId?.imageUrl?.[0] || ""
+                        }`}
                         alt={cartItem.itemName}
-                        style={{ width: "50px", height: "50px", marginRight: "10px" }}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          marginRight: "10px",
+                        }}
                       />
                       <Box flex="1">
-                        <Typography variant="body2">{cartItem.itemName}</Typography>
-                        <Typography variant="body2">Qty: {cartItem.quantity}</Typography>
+                        <Typography variant="body2">
+                          {cartItem.productId.itemName}
+                        </Typography>
+                        <Typography variant="body2">
+                          Qty: {cartItem.quantity}
+                        </Typography>
+                        <Typography variant="body2">
+                          Price: ${cartItem.itemPrice}
+                        </Typography>
                       </Box>
-                      <Typography variant="body2">${cartItem.totalPrice}</Typography>
+                      <Typography variant="body2">
+                        ${cartItem.totalPrice}
+                      </Typography>
                     </Box>
                   ))}
+
                   <Box display="flex" justifyContent="space-between" mt={2}>
                     <Typography variant="body1">Total:</Typography>
-                    <Typography variant="body1">${totalPrice}</Typography>
+                    <Typography variant="body1">
+                      $
+                      {cartData.item.reduce(
+                        (sum, cartItem) => sum + cartItem.totalPrice,
+                        0
+                      )}
+                    </Typography>
                   </Box>
+
                   <Button
                     variant="contained"
                     color="primary"

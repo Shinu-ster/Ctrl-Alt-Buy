@@ -1,6 +1,6 @@
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -37,6 +37,8 @@ const addToCart = async (cartItem) => {
 };
 
 export default function Shop() {
+  const queryClient = useQueryClient();
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -46,6 +48,8 @@ export default function Shop() {
     mutationFn: addToCart,
     onSuccess: (data) => {
       console.log("Added successfully:", data);
+      queryClient.invalidateQueries(["cart"]);
+
       // Optional: Update any state here, e.g., cart count
     },
     onError: (error) => {
@@ -105,6 +109,7 @@ export default function Shop() {
                   className="w-full h-48 object-cover"
                 />
                 <h2 className="text-xl font-semibold p-4">{product.itemName}</h2>
+                <h3 className="text-xl font-extralight p-2 truncate">{product.description}</h3>
               </Link>
 
               {/* Product Price and Button */}

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const getCart = async(req,res)=>{
-    const Cart = mongoose.model('Cart');
-    const userId = req.userId;
+    const Cart = require('../../../models/cart.models');
+    const userId = req.userId._id;
+    console.log("User Id: ",userId);
     try{
-        const cart = await Cart.findById({userId}).populate('item.productId');
+        const cart = await Cart.findOne({userId}).populate('item.productId');
         if(cart.length===0){
             return res.status(404).json({
                 message: "Add items in your cart to view them here"

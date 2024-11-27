@@ -8,9 +8,10 @@ const AdminSidebar = () => {
 
   return (
     <aside className="h-screen w-72 bg-white shadow-md flex flex-col">
-      <div className="flex items-center justify-center p-6 border-b">
-        <img src="src/assets/logo.jpg" alt="Logo" className="w-36 h-auto" />
-      </div>
+     <div className="flex items-center justify-center p-10 border-b">
+  <img src="/logo/NavLogo.png" alt="Logo" className="w-52 h-auto" />
+</div>
+
 
       <nav className="flex-1 px-6 py-8 space-y-4">
         <ul>
@@ -53,7 +54,7 @@ const AdminSidebar = () => {
       </nav>
 
       <div className="border-t p-6 flex items-center">
-        <img src="src/assets/profile-pic.jpg" alt="Profile" className="w-12 h-12 rounded-full" />
+        <img src="/admin/profile-pic.jpg" alt="Profile" className="w-12 h-12 rounded-full" />
         <div className="border-l border-gray-200 h-14 mx-4"></div>
         <div>
           <h4 className="font-semibold text-lg">Admin</h4>
