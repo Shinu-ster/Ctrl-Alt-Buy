@@ -2,21 +2,14 @@ import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Button
-} from "@mui/material";
+import { Box, CircularProgress, Typography, Button } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BreadCrumbs from "../components/BreadCrumbs";
 import Carousel from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { ToastContainer, toast } from 'react-toastify';
-
-
+import { ToastContainer, toast } from "react-toastify";
 
 // Fetch Product details
 const fetchProduct = async (id) => {
@@ -32,23 +25,23 @@ const fetchProduct = async (id) => {
   return response.data;
 };
 
-const addToCart = async(cartItem)=>{
-  const authToken = localStorage.getItem('accessToken');
+const addToCart = async (cartItem) => {
+  const authToken = localStorage.getItem("accessToken");
   try {
     const response = await axios.post(
       "http://localhost:8000/cart/addtoCart",
-      {cartItem:[cartItem]},
+      { cartItem: [cartItem] },
       {
-        headers:{
-          Authorization: `Bearer ${authToken}`
-        }
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
       }
     );
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to add to cart");
   }
-}
+};
 
 function SingleProduct() {
   const queryClient = useQueryClient();
@@ -63,16 +56,16 @@ function SingleProduct() {
   });
 
   const mutation = useMutation({
-    mutationFn:addToCart,
-    onSuccess:()=>{
-      toast.success('Added to cart');
+    mutationFn: addToCart,
+    onSuccess: () => {
+      toast.success("Added to cart");
       queryClient.invalidateQueries(["cart"]);
     },
-    onError:(error)=>{
-      console.error("Add to cart failed",error);
+    onError: (error) => {
+      console.error("Add to cart failed", error);
       toast.error("Adding to cart failed");
-    }
-  })
+    },
+  });
 
   if (isLoading) {
     return (
@@ -128,29 +121,51 @@ function SingleProduct() {
       >
         {/* Left side: Product Image */}
         <Box sx={{ width: "50%", padding: 2 }}>
-          <Carousel
-            dots={true}
-            infinite={true}
-            slidesToShow={1}
-            slidesToScroll={1}
-          >
-            {product.imageUrl.map((image, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <img
-                  src={`http://localhost:8000${image}`}
-                  alt={product.itemName}
-                  style={{
-                    width: "100%", // Adjust width as needed
-                    height: "600px", // Set a fixed height for tall image
-                    objectFit: "cover", // Ensure the image covers the area without distortion
+          {/* Conditionally render the Carousel only if there are multiple images */}
+          {product.imageUrl?.length > 1 ? (
+            <Carousel
+              dots={true}
+              infinite={true}
+              slidesToShow={1}
+              slidesToScroll={1}
+              centerMode={false}
+              focusOnSelect={true}
+            >
+              {product.imageUrl?.map((image, index) => (
+                <Box
+                  key={index} // Using a unique key based on the image URL
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "10px", // Padding for better image positioning
                   }}
-                />
-              </Box>
-            ))}
-          </Carousel>
+                >
+                  <img
+                    src={`http://localhost:8000${image}`}
+                    alt={product.itemName}
+                    style={{
+                      width: "100%", // Adjust width as needed
+                      height: "600px", // Set a fixed height for the image
+                      objectFit: "cover", // Ensure the image covers the area without distortion
+                    }}
+                  />
+                </Box>
+              ))}
+            </Carousel>
+          ) : (
+            // If there's only one image, display it directly without Carousel
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <img
+                src={`http://localhost:8000${product.imageUrl[0]}`}
+                alt={product.itemName}
+                style={{
+                  width: "100%", // Adjust width as needed
+                  height: "600px", // Set a fixed height for the image
+                  objectFit: "cover", // Ensure the image covers the area without distortion
+                }}
+              />
+            </Box>
+          )}
         </Box>
 
         {/* Right side: Product Details */}
@@ -193,37 +208,36 @@ function SingleProduct() {
 
           {/* Action Buttons */}
           {/* Action Buttons */}
-<Box sx={{ mt: 4, display: "flex", gap: 2 }}>
-  <Button
-    variant="contained"
-    color="primary"
-    startIcon={<AddShoppingCartIcon />}
-    sx={{ padding: "12px 24px" }}
-    onClick={() => {
-      // Trigger the mutation to add to cart
-      mutation.mutate({
-        productId: product._id,
-        itemName: product.itemName,
-        itemPrice: product.itemPrice,
-        imageUrl: product.imageUrl[0], // Send the first image as a preview (if needed)
-        quantity: 1, // Default quantity when adding a new item
-      });
-    }}
-    disabled={mutation.isLoading} // Disable the button while the mutation is in progress
-  >
-    {mutation.isLoading ? "Adding..." : "Add to Cart"}
-  </Button>
+          <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddShoppingCartIcon />}
+              sx={{ padding: "12px 24px" }}
+              onClick={() => {
+                // Trigger the mutation to add to cart
+                mutation.mutate({
+                  productId: product._id,
+                  itemName: product.itemName,
+                  itemPrice: product.itemPrice,
+                  imageUrl: product.imageUrl[0], // Send the first image as a preview (if needed)
+                  quantity: 1, // Default quantity when adding a new item
+                });
+              }}
+              disabled={mutation.isLoading} // Disable the button while the mutation is in progress
+            >
+              {mutation.isLoading ? "Adding..." : "Add to Cart"}
+            </Button>
 
-  <Button
-    variant="contained"
-    color="secondary"
-    startIcon={<ShoppingCartIcon />}
-    sx={{ padding: "12px 24px" }}
-  >
-    Buy Now
-  </Button>
-</Box>
-
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<ShoppingCartIcon />}
+              sx={{ padding: "12px 24px" }}
+            >
+              Buy Now
+            </Button>
+          </Box>
         </Box>
       </Box>
     </>

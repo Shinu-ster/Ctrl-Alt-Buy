@@ -13,6 +13,7 @@ import SingleProduct from "../pages/SingleProduct";
 import Cart from "../pages/Cart";
 import Success from "../pages/payment/Success";
 import CancelPage from "../pages/payment/Cancel";
+import AdminViewProducts from "../pages/adminPages/AdminViewProducts";
 
 //   const { cart, addToCart, updateQuantity, removeFromCart } = useContext(CartContext);
 
@@ -150,9 +151,10 @@ export default function MyRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/devportal/login" element={<AdminLogin />} />
         <Route path="/devportal/register" element={<AdminRegister />} />
-        <Route path="/addproducts" element={<AddProducts />} />
+        <Route path="/admin/addproducts" element={<AddProducts />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/viewOrders" element={<ViewOrders />} />
+        <Route path="/admin/viewOrders" element={<ViewOrders />} />
+        <Route path="/admin/viewProducts" element={<AdminViewProducts />} />
         <Route path="/productdetails/:id" element={<SingleProduct />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/cart" element={<Cart />} />

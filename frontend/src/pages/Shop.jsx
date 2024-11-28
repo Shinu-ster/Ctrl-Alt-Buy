@@ -114,7 +114,7 @@ export default function Shop() {
 
               {/* Product Price and Button */}
               <div className="p-4">
-                <p className="text-lg text-green-500">{`$${product.itemPrice}`}</p>
+                <p className="text-lg text-green-500">{`NPR ${product.itemPrice}`}</p>
                 <button
                   className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 focus:outline-none"
                   onClick={() => checkLogin(product)}

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+
 const userRouter = require('./modules/users/users.routes');
 const adminRouter = require('./modules/admin/admin.routes');
 const productsRouter = require('./modules/products/products.routes');
@@ -14,9 +15,13 @@ const app = express();
 require('./models/admin.model');
 require('./models/users.model');
 require('./models/products.model');
+require('./models/order.model');
+
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+
 
 
 app.use('/user',userRouter);

@@ -15,35 +15,35 @@ const AdminSidebar = () => {
 
       <nav className="flex-1 px-6 py-8 space-y-4">
         <ul>
-          <Link to="/adminDashboard">
+          <Link to="/admin/dashboard">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/adminDashboard") ? "bg-gray-200" : ""}`}
             >
               Dashboard
             </li>
           </Link>
-          <Link to="/viewProducts">
+          <Link to="/admin/viewProducts">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/viewProducts") ? "bg-gray-200" : ""}`}
             >
               View Products
             </li>
           </Link>
-          <Link to="/addProducts">
+          <Link to="/admin/addProducts">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/addProducts") ? "bg-gray-200" : ""}`}
             >
               Add Products
             </li>
           </Link>
-          <Link to="/viewOrders">
+          <Link to="/admin/viewOrders">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/orders") ? "bg-gray-200" : ""}`}
             >
               View Orders
             </li>
           </Link>
-          <Link to="/settings">
+          <Link to="/admin/settings">
             <li
               className={`hover:bg-gray-100 p-3 rounded-md ${isActive("/settings") ? "bg-gray-200" : ""}`}
             >
