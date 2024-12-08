@@ -149,8 +149,8 @@ export default function MyRoutes() {
         <Route path="/" element={<Home />} exact />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/devportal/login" element={<AdminLogin />} />
-        <Route path="/devportal/register" element={<AdminRegister />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/admin/addproducts" element={<AddProducts />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/viewOrders" element={<ViewOrders />} />

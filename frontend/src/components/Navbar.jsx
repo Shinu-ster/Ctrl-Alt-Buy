@@ -1,30 +1,27 @@
-  import {  useState } from "react";
-  import { Link } from "react-router-dom";
-  import {
-    IconButton,
-    Badge,
-    Popover,
-    Box,
-    Typography,
-    Button,
-    CircularProgress,
-  } from "@mui/material";
-  import { ShoppingCart as ShoppingCartIcon } from "@mui/icons-material";
-  import axios from "axios";
-  
-  
-
-  import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  IconButton,
+  Badge,
+  Popover,
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import { ShoppingCart as ShoppingCartIcon } from "@mui/icons-material";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem("accessToken");
 
   const fetchCart = async () => {
-    const authToken = localStorage.getItem("accessToken");
     const response = await axios.get("http://localhost:8000/cart/getCart", {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return response.data;
@@ -33,6 +30,7 @@ const Navbar = () => {
   const { isLoading, error, data: cartData } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
+    enabled: !!accessToken, // Only fetch cart data if accessToken exists
   });
 
   const handleCartClick = (event) => {
@@ -43,7 +41,11 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-
+  // Logout functionality
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken"); // Remove token
+    navigate("/login"); // Redirect to login page
+  };
 
   return (
     <nav className="text-white shadow-md" style={{ height: "64px" }}>
@@ -60,7 +62,7 @@ const Navbar = () => {
         </div>
 
         {/* Cart Icon with Badge */}
-        <div>
+        <div className="flex items-center gap-4">
           <IconButton onClick={handleCartClick}>
             <Badge color="error" badgeContent={cartData?.item?.length || 0}>
               <ShoppingCartIcon sx={{ color: "black" }} />
@@ -149,6 +151,25 @@ const Navbar = () => {
               )}
             </Box>
           </Popover>
+
+          {/* Conditional Login/Logout Button */}
+          {accessToken ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+          )}
         </div>
       </div>
     </nav>
