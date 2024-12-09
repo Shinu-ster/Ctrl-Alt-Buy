@@ -1,5 +1,5 @@
 // src/pages/admin/AddProducts.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -21,6 +21,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminSidebar from "../../components/AdminSidebar";
+import { useNavigate } from "react-router-dom";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -35,6 +36,18 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function AddProducts() {
+  const navigate = useNavigate();
+  const checkAdminLogin = ()=>{
+    console.log('object')
+    const auth = localStorage.getItem('adminAT');
+    if(!auth){
+      console.log("User isn't logged in");
+      navigate('/admin/login');
+    }
+  }
+
+  useEffect(()=>{checkAdminLogin();},[])
+
   const [specificationKey, setSpecificationKey] = useState("");
   const [specificationValue, setSpecificationValue] = useState("");
   const [specifications, setSpecifications] = useState([]);

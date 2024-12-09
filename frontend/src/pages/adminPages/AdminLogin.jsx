@@ -3,7 +3,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AdminLogin() {
   const validationSchema = Yup.object({
@@ -50,8 +50,11 @@ export default function AdminLogin() {
               .post('http://localhost:8000/admin/login', values)
               .then((response) => {
                 toast.success(response.data.status);
+                console.log(response.data);
+                localStorage.setItem('adminAT',response.data.accessToken);
                 setTimeout(() => {
-                  navigate('/admin/dashboard');
+
+                  navigate('/admin/viewProducts');
                 }, 1000);
               })
               .catch((error) => {
@@ -105,6 +108,11 @@ export default function AdminLogin() {
           )}
         </Formik>
         <ToastContainer />
+        <Link to='/admin/register'>
+        <button className="text-blue-700 text-base font-medium mt-4">
+          Sign up
+        </button>
+        </Link>
       </Paper>
     </Box>
   );

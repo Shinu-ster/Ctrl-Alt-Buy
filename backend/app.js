@@ -1,44 +1,44 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const path = require('path');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const path = require("path");
 
-const userRouter = require('./modules/users/users.routes');
-const adminRouter = require('./modules/admin/admin.routes');
-const productsRouter = require('./modules/products/products.routes');
-const cartRouter = require('./modules/cart/cart.routes');
-const paymentRouter = require('./modules/payment/payment.routes');
-require('dotenv').config();
+const userRouter = require("./modules/users/users.routes");
+const adminRouter = require("./modules/admin/admin.routes");
+const productsRouter = require("./modules/products/products.routes");
+const cartRouter = require("./modules/cart/cart.routes");
+const paymentRouter = require("./modules/payment/payment.routes");
+const orderRouter = require("./modules/order/order.routes");
+require("dotenv").config();
 const app = express();
 
-
-require('./models/admin.model');
-require('./models/users.model');
-require('./models/products.model');
-require('./models/order.model');
-
+require("./models/admin.model");
+require("./models/users.model");
+require("./models/products.model");
+require("./models/order.model");
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
+app.use("/user", userRouter);
+app.use("/admin", adminRouter);
+app.use("/products", productsRouter);
+app.use("/cart", cartRouter);
+app.use("/pay", paymentRouter);
+app.use("/order",orderRouter);
 
+mongoose
+  .connect(process.env.mongo_connect, {})
+  .then(() => {
+    console.log("DB Connected");
+  })
+  .catch((e) => {
+    console.log("Connection failed", e);
+  });
 
-app.use('/user',userRouter);
-app.use('/admin',adminRouter);
-app.use('/products',productsRouter);
-app.use('/cart',cartRouter);
-app.use('/pay',paymentRouter)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-mongoose.connect(process.env.mongo_connect,{}).then(()=>{
-    console.log('DB Connected');
-})
-.catch((e)=>{
-    console.log('Connection failed',e);
-})
-
-app.use('/uploads',express.static(path.join(__dirname,'uploads')))
-
-app.listen(8000,()=>{
-    console.log('Server started Succesfully');
-})
+app.listen(8000, () => {
+  console.log("Server started Succesfully");
+});

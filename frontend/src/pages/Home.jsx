@@ -43,20 +43,20 @@ function Home() {
 
   const reviews = [
     {
-      name: "Alex Johnson",
-      image: "/reviews/user1.jpg",
+      name: "Gadafi",
+      image: "/reviews/gadafi.jpeg",
       review:
         "Amazing products! The quality of the gaming headset I purchased exceeded my expectations. Highly recommend this store.",
     },
     {
-      name: "Samantha Lee",
-      image: "/reviews/user2.jpg",
+      name: "Mr. Lakhe",
+      image: "/reviews/lakhe.jpeg",
       review:
         "Fast shipping and great customer service. The mechanical keyboard is a game-changer for my setup!",
     },
     {
-      name: "Daniel Carter",
-      image: "/reviews/user3.jpg",
+      name: "Gamer Khadgi",
+      image: "/reviews/girl.jpg",
       review:
         "Love the gaming mouse I got from here. The precision and ergonomics are top-notch. Will shop again.",
     },

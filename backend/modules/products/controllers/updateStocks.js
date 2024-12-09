@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 // Function to update product stock
 const updateStocks = async (req, res) => {
-    const Product = mongoose.model('Products'); // Assuming you have a Mongoose model for products
+    const Product = mongoose.model('products'); // Assuming you have a Mongoose model for products
   try {
     const productId = req.params.id; // Extract product ID from the request parameters
     const { stock } = req.body; // Extract the new stock value from the request body

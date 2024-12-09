@@ -1,6 +1,19 @@
+import { useEffect } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+  const checkAdminLogin = ()=>{
+    console.log('object')
+    const auth = localStorage.getItem('adminAT');
+    if(!auth){
+      console.log("User isn't logged in");
+      navigate('/admin/login');
+    }
+  }
+
+  useEffect(()=>{checkAdminLogin();},[])
   return (
     <div className="flex">
       

@@ -2,7 +2,7 @@ import { Button, TextField, Typography, Paper, Avatar } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -120,6 +120,11 @@ export default function AdminRegister() {
           )}
         </Formik>
         <ToastContainer />
+        <Link to='/admin/login'>
+        <button className="text-blue-700 text-base font-medium mt-4">
+          Sign in
+        </button>
+        </Link>
       </Paper>
     </Box>
   );

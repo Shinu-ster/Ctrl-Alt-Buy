@@ -6,6 +6,7 @@ const getProducts = require('./controllers/getAllProducts');
 const auth = require('../../middlewares/auth');
 const getSingleProduct = require('./controllers/getSingleProduct');
 const updateStocks = require('./controllers/updateStocks');
+const deleteProduct = require('./controllers/deleteProduct');
 
 const productsRouter = express.Router();
 
@@ -13,5 +14,6 @@ productsRouter.post('/addProducts',upload.array('productImages',5),addProduct);
 productsRouter.get('/getall',getProducts);
 productsRouter.get('/item/:id',getSingleProduct);
 productsRouter.put('/updateStocks/:id',updateStocks)
+productsRouter.delete('/delete/:id',deleteProduct);
 
 module.exports = productsRouter;
