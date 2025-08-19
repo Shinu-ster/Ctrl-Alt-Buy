@@ -1,10 +1,16 @@
-import React from "react";
 import Slider from "react-slick"; // React-slick for carousel
 import "slick-carousel/slick/slick.css"; // Import slick-carousel CSS
 import "slick-carousel/slick/slick-theme.css";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function Home() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleGoToShopping = () => {
+    navigate("/shop"); // Navigate to the shop page
+  };
+
   const bannerImages = [
     "/banner/banner1.jpg",
     "/banner/banner2.jpg",
@@ -87,6 +93,8 @@ function Home() {
         ))}
       </Slider>
 
+
+
       {/* Categories Section */}
       <div className="py-8 px-4">
         <h2 className="text-2xl font-bold text-center mb-6">
@@ -111,6 +119,15 @@ function Home() {
             </div>
           ))}
         </div>
+      </div>
+            {/* Go to Shopping Button */}
+            <div className="flex justify-center my-8">
+        <button
+          onClick={handleGoToShopping}
+          className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition"
+        >
+          Go to Shopping
+        </button>
       </div>
 
       {/* Featured Products Section */}
@@ -164,8 +181,7 @@ function Home() {
         </div>
       </div>
 
-      
-     <Footer/>
+      <Footer />
     </div>
   );
 }
